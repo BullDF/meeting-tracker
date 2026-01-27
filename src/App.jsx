@@ -36,14 +36,18 @@ function App() {
                         setInput('')
                         setHistory([...history, ['right', input]])
                         setLoading(true)
-                        const response = await makeAPICall(input)
-                        setHistory([...history, ['right', input], ['left', response.text]])
+                        try {
+                            const response = await makeAPICall(input)
+                            setHistory([...history, ['right', input], ['left', response.text]])
+                        } catch (error) {
+                            setHistory([...history, ['right', input], ['left', 'Server is busy. Please try again later.']])
+                        }
 
                         setLoading(false)
                     }}
                     disabled={loading}
                 >
-                    Submit
+                    Send
                 </button>
             </div>
         </div>
