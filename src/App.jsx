@@ -10,7 +10,7 @@ function App() {
 
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-    }, [input])
+    }, [loading])
 
     const submitRequest = async () => {
         setInput('')
@@ -18,7 +18,7 @@ function App() {
         setLoading(true)
         try {
             // const response = await makeAPICall(input)
-            const response = testResponse()
+            const response = await testResponse()
             let json
             try {
                 json = JSON.parse(response.text)
