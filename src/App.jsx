@@ -19,7 +19,16 @@ function App() {
         try {
             // const response = await makeAPICall(input)
             const response = testResponse()
-            setHistory([...history, ['right', input], ['left', response.text]])
+            let json
+            try {
+                json = JSON.parse(response.text)
+                for (const task of json.tasks) {
+                    task.completed = false
+                }
+                setHistory([...history, ['right', input], ['left', json]])
+            } catch (_) {
+                setHistory([...history, ['right', input], ['left', 'JSON Error']])
+            }
         } catch (_) {
             setHistory([...history, ['right', input], ['left', 'API Error']])
         }
@@ -30,14 +39,10 @@ function App() {
     const formatResponse = (text) => {
         if (text === 'API Error') {
             return (<div>Server is unavailable. Please try again later.</div>)
-        }
-
-        let json
-        try {
-            json = JSON.parse(text)
-        } catch (_) {
+        } else if (text === 'JSON Error')
             return (<div>Invalid response format. Please try again.</div>)
-        }
+
+        const json = text
 
         return (
             <div>
@@ -51,6 +56,7 @@ function App() {
                                 <th>Task</th>
                                 <th>Owner</th>
                                 <th>Due Date</th>
+                                <th>Completed</th>
                             </tr>
                         </thead>
 
@@ -58,9 +64,19 @@ function App() {
                             {json.tasks.map((task) => (
                                 <tr key={task.id}>
                                     <td>{task.id}</td>
-                                    <td>{task.task}</td>
-                                    <td>{task.owner}</td>
-                                    <td>{task.due_date}</td>
+                                    <td>{task.completed ? <s>{task.task}</s> : <div>{task.task}</div>}</td>
+                                    <td>{task.completed ? <s>{task.owner}</s> : <div>{task.owner}</div>}</td>
+                                    <td>{task.completed ? <s>{task.due_date}</s> : <div>{task.due_date}</div>}</td>
+                                    <td>
+                                        <input
+                                            type='checkbox'
+                                            checked={task.completed}
+                                            onChange={() => {
+                                                task.completed = !task.completed
+                                                setHistory([...history])
+                                            }}
+                                        />
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
