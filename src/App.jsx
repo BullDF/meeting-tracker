@@ -10,7 +10,7 @@ function App() {
 
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-    }, [history])
+    }, [input])
 
     const submitRequest = async () => {
         setInput('')
