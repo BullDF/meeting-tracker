@@ -7,6 +7,59 @@ function App() {
     const [loading, setLoading] = useState(false)
     const [history, setHistory] = useState([])
 
+    const submitRequest = async () => {
+        setInput('')
+        setHistory([...history, ['right', input]])
+        setLoading(true)
+        try {
+            const response = await makeAPICall(input)
+            setHistory([...history, ['right', input], ['left', response.text]])
+        } catch (error) {
+            setHistory([...history, ['right', input], ['left', 'Server is unavailable. Please try again later.']])
+        }
+
+        setLoading(false)
+    }
+
+    const formatResponse = (text) => {
+        let json
+        try {
+            json = JSON.parse(text)
+        } catch (_) {
+            return (<div>Invalid response format. Please try again.</div>)
+        }
+
+        return (
+            <div>
+                <div>{json.message}</div>
+
+                {json.tasks.length === 0 ? null : (
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Task</th>
+                                <th>Owner</th>
+                                <th>Due Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {json.tasks.map((task) => (
+                                <tr key={task.id}>
+                                    <td>{task.id}</td>
+                                    <td>{task.task}</td>
+                                    <td>{task.owner}</td>
+                                    <td>{task.due_date}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+            </div>
+        )
+    }
+
     return (
         <div className="app-container">
             <h1>Meeting Tracker</h1>
@@ -14,10 +67,10 @@ function App() {
             <div className="chat-area">
                 {history.length === 0 ? (
                     <p className="placeholder-text">What do you want to summarize today?</p>
-                ) : (history.map(([align, content], i) => (
+                ) : (history.map(([align, text], i) => (
                     <div key={i} className={`bubble-wrapper ${align === 'right' ? 'bubble-wrapper-right' : 'bubble-wrapper-left'}`}>
                         <div className={align === 'right' ? 'bubble-right' : 'bubble-left'}>
-                            {content}
+                            {align === 'left' ? (formatResponse(text)) : (<div>{text}</div>)}
                         </div>
                     </div>
                 )))}
@@ -29,22 +82,16 @@ function App() {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     rows={3}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault()
+                            submitRequest()
+                        }
+                    }}
                 />
 
                 <button
-                    onClick={async () => {
-                        setInput('')
-                        setHistory([...history, ['right', input]])
-                        setLoading(true)
-                        try {
-                            const response = await makeAPICall(input)
-                            setHistory([...history, ['right', input], ['left', response.text]])
-                        } catch (error) {
-                            setHistory([...history, ['right', input], ['left', 'Server is busy. Please try again later.']])
-                        }
-
-                        setLoading(false)
-                    }}
+                    onClick={submitRequest}
                     disabled={loading}
                 >
                     Send
