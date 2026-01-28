@@ -14,14 +14,18 @@ function App() {
         try {
             const response = await makeAPICall(input)
             setHistory([...history, ['right', input], ['left', response.text]])
-        } catch (error) {
-            setHistory([...history, ['right', input], ['left', 'Server is unavailable. Please try again later.']])
+        } catch (_) {
+            setHistory([...history, ['right', input], ['left', 'API Error']])
         }
 
         setLoading(false)
     }
 
     const formatResponse = (text) => {
+        if (text === 'API Error') {
+            return (<div>Server is unavailable. Please try again later.</div>)
+        }
+
         let json
         try {
             json = JSON.parse(text)
