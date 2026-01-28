@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { makeAPICall, testResponse } from './utils'
 import './App.css'
 
@@ -6,6 +6,11 @@ function App() {
     const [input, setInput] = useState('')
     const [loading, setLoading] = useState(false)
     const [history, setHistory] = useState([])
+    const chatEndRef = useRef(null)
+
+    useEffect(() => {
+        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [history])
 
     const submitRequest = async () => {
         setInput('')
@@ -79,6 +84,7 @@ function App() {
                         </div>
                     </div>
                 )))}
+                <div ref={chatEndRef} />
             </div>
 
             <div className="input-row">
