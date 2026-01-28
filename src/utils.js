@@ -28,3 +28,31 @@ The response must be raw JSON with the format below. Do not wrap the JSON in tic
 
     return response
 }
+
+export function testResponse() {
+    const response = `{
+        "message": "Here is a breakdown of the meeting notes:",
+        "tasks": [
+            {
+                "id": 1,
+                "task": "Send the API docs to the client",
+                "owner": "Dan",
+                "due_date": "Friday"
+            },
+            {
+                "id": 2,
+                "task": "Follow up with the client about onboarding",
+                "owner": "Unassigned",
+                "due_date": "next week"
+            },
+            {
+                "id": 3,
+                "task": "Investigate checkout bug affecting Safari users",
+                "owner": "Jason",
+                "due_date": null
+            }
+        ]
+    }`
+
+    return { text: response }
+}

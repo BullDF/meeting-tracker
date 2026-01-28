@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { makeAPICall } from './utils'
+import { makeAPICall, testResponse } from './utils'
 import './App.css'
 
 function App() {
@@ -12,7 +12,8 @@ function App() {
         setHistory([...history, ['right', input]])
         setLoading(true)
         try {
-            const response = await makeAPICall(input)
+            // const response = await makeAPICall(input)
+            const response = testResponse()
             setHistory([...history, ['right', input], ['left', response.text]])
         } catch (_) {
             setHistory([...history, ['right', input], ['left', 'API Error']])
