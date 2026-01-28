@@ -112,14 +112,16 @@ function App() {
 
     return (
         <div className="app-container">
-            <h1>Meeting Tracker</h1>
-
-            <button
-                onClick={exportAsMarkdown}
-                disabled={loading}
-            >
-                Export as Markdown
-            </button>
+            <div className="header-row">
+                <h1>Meeting Tracker</h1>
+                <button
+                    className="export-btn"
+                    onClick={exportAsMarkdown}
+                    disabled={loading}
+                >
+                    Export as Markdown
+                </button>
+            </div>
 
             <div className="chat-area">
                 {history.length === 0 ? (
