@@ -143,7 +143,7 @@ function App() {
                     onChange={(e) => setInput(e.target.value)}
                     rows={3}
                     onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
+                        if (e.key === 'Enter' && !e.shiftKey && input.trim() !== '') {
                             e.preventDefault()
                             submitRequest()
                         }
@@ -152,7 +152,7 @@ function App() {
 
                 <button
                     onClick={submitRequest}
-                    disabled={loading}
+                    disabled={loading || input.trim() === ''}
                 >
                     Send
                 </button>
