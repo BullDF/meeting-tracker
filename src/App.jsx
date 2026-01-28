@@ -36,6 +36,30 @@ function App() {
         setLoading(false)
     }
 
+    const exportAsMarkdown = () => {
+        let md = ''
+        md += '| ID | Task | Owner | Due Date | Completed |\n'
+        md += '|----|------|-------|----------|-----------|\n'
+
+        let i = 1
+        for (const [align, json] of history) {
+            if (align === 'left' && typeof(json) === 'object') {
+                for (const task of json.tasks) {
+                    md += `| ${i} | ${task.task} | ${task.owner} | ${task.due_date} | ${task.completed} |\n`
+                    i++
+                }
+            }
+        }
+
+        const blob = new Blob([md], { type: 'text/markdown' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'task.md'
+        a.click()
+        URL.revokeObjectURL(url)
+    }
+
     const formatResponse = (text) => {
         if (text === 'API Error') {
             return (<div>Server is unavailable. Please try again later.</div>)
@@ -89,6 +113,13 @@ function App() {
     return (
         <div className="app-container">
             <h1>Meeting Tracker</h1>
+
+            <button
+                onClick={exportAsMarkdown}
+                disabled={loading}
+            >
+                Export as Markdown
+            </button>
 
             <div className="chat-area">
                 {history.length === 0 ? (
