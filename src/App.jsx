@@ -111,11 +111,11 @@ function App() {
     }
 
     return (
-        <div className="app-container">
-            <div className="header-row">
+        <div className='app-container'>
+            <div className='header-row'>
                 <h1>Meeting Tracker</h1>
                 <button
-                    className="export-btn"
+                    className='export-btn'
                     onClick={exportAsMarkdown}
                     disabled={loading}
                 >
@@ -123,9 +123,9 @@ function App() {
                 </button>
             </div>
 
-            <div className="chat-area">
+            <div className='chat-area'>
                 {history.length === 0 ? (
-                    <p className="placeholder-text">What do you want to summarize today?</p>
+                    <p className='placeholder-text'>What do you want to summarize today?</p>
                 ) : (history.map(([align, text], i) => (
                     <div key={i} className={`bubble-wrapper ${align === 'right' ? 'bubble-wrapper-right' : 'bubble-wrapper-left'}`}>
                         <div className={align === 'right' ? 'bubble-right' : 'bubble-left'}>
@@ -136,7 +136,7 @@ function App() {
                 <div ref={chatEndRef} />
             </div>
 
-            <div className="input-row">
+            <div className='input-row'>
                 <textarea
                     placeholder='Enter meeting notes here...'
                     value={input}
