@@ -17,8 +17,8 @@ function App() {
         setHistory([...history, ['right', input]])
         setLoading(true)
         try {
-            // const response = await makeAPICall(input)
-            const response = await testResponse()
+            // const response = await testResponse()
+            const response = await makeAPICall(input)
             let json
             try {
                 json = JSON.parse(response.text)
